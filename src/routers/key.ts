@@ -1,13 +1,5 @@
 export const router_keys = {
-  login: '/login',
-  home: '/home',
+  posts: '/posts',
   dashboard: '/dashboard',
-
-  template: {
-    table: {
-      list: '/template/table',
-      detail: (id: string) => `/template/table/${id}`,
-    },
-  },
-  profile: '/profile',
+  settings: '/settings',
 }

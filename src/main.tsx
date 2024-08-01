@@ -10,9 +10,7 @@ import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-d
 import { setupI18n } from 'vite-plugin-i18n-detector/client'
 import vi from './locales/messages/vi.json'
 import { routers } from '@routers'
-import SettingProvider from '@contexts/setting/provider'
 import { AnimatePresence } from 'framer-motion'
-import TagViewProvider from '@contexts/tag-view/provider'
 
 const root = ReactDOM.createRoot(document.getElementById('root')!)
 
@@ -61,13 +59,9 @@ const { loadResourceByLang } = setupI18n({
         <StyledThemeProvider>
           <StyledProvider>
             <AntDesignProvider>
-              <SettingProvider>
-                <TagViewProvider>
-                  <AnimatePresence mode="wait">
-                    <RouterProvider router={router} />
-                  </AnimatePresence>
-                </TagViewProvider>
-              </SettingProvider>
+              <AnimatePresence mode="wait">
+                <RouterProvider router={router} />
+              </AnimatePresence>
             </AntDesignProvider>
           </StyledProvider>
         </StyledThemeProvider>

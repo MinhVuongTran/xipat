@@ -2,7 +2,6 @@ import React, { HTMLProps, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as echarts from 'echarts'
 import { debounce } from 'lodash'
-import { useSetting } from '@contexts/setting/context'
 
 type LineChartProps = {} & HTMLProps<HTMLDivElement>
 
@@ -102,17 +101,6 @@ const LineChart: React.FC<React.PropsWithChildren<LineChartProps>> = ({ ...p }) 
       chart.current?.dispose()
     }
   }, [])
-
-  const { sidebarCollapsed } = useSetting()
-
-  useEffect(() => {
-    const resize = debounce(() => chart.current?.resize(), 300)
-    resize()
-    window.addEventListener('resize', resize)
-    return () => {
-      window.removeEventListener('resize', resize)
-    }
-  }, [sidebarCollapsed])
 
   return <ChartDiv {...p} ref={ref} />
 }

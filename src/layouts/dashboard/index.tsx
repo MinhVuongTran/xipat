@@ -1,82 +1,56 @@
-import { Layout } from 'antd'
+import { BookOutlined, DashboardOutlined, SettingFilled } from '@ant-design/icons'
+import { router_keys } from '@routers/key'
+import { Layout, Menu, theme } from 'antd'
+import { Content, Header } from 'antd/es/layout/layout'
+import Sider from 'antd/es/layout/Sider'
 import React from 'react'
-import styled from 'styled-components'
-import LayoutSider from './sider'
-import LayoutHeader from './header'
-import { Outlet } from 'react-router-dom'
-import cx from 'classnames'
-import {
-  ANIMATION_SPEED,
-  HEADER_HEIGHT,
-  SIDER_BAR_COLLAPSED_WIDTH,
-  SIDER_BAR_WIDTH,
-} from './constants'
-import { useSetting } from '@contexts/setting/context'
-import TagView, { TAG_VIEW_HEIGHT } from './tag-view'
-import { media_break_points } from '@themes/styled/globalStyle'
-
-const LayoutStyled = styled(Layout)`
-  position: relative;
-  height: 100%;
-  width: 100%;
-  display: block;
-`
-
-const Wrap = styled.div`
-  margin-left: ${SIDER_BAR_WIDTH / 10}rem;
-  transition:
-    all ${ANIMATION_SPEED}s,
-    background 0s;
-  &.collapsed {
-    margin-left: ${SIDER_BAR_COLLAPSED_WIDTH / 10}rem;
-  }
-
-  ${media_break_points.xs} {
-    margin-left: 0 !important;
-  }
-`
-
-const FixedHeader = styled.div<{ $collapsed?: boolean }>`
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 9;
-  width: calc(100% - ${p => (p.$collapsed ? SIDER_BAR_COLLAPSED_WIDTH : SIDER_BAR_WIDTH) / 10}rem);
-  transition: width ${ANIMATION_SPEED}s;
-
-  ${media_break_points.xs} {
-    width: 100%;
-  }
-`
-
-const MainApp = styled.div`
-  width: 100%;
-  transition: width ${ANIMATION_SPEED}s;
-
-  position: relative;
-  overflow: hidden;
-  padding-top: ${HEADER_HEIGHT / 10 + TAG_VIEW_HEIGHT / 10}rem;
-`
-
+import { Link, Outlet } from 'react-router-dom'
 type DashboardLayoutProps = {}
 
+const items = [
+  {
+    key: '/dashboard',
+    label: <Link to={router_keys.dashboard}>Dashboard</Link>,
+    icon: <DashboardOutlined />,
+  },
+  {
+    key: '/posts',
+    label: <Link to={router_keys.posts}>Post Manager</Link>,
+    icon: <BookOutlined />,
+  },
+  {
+    key: '/settings',
+    label: <Link to={router_keys.settings}>Settings</Link>,
+    icon: <SettingFilled />,
+  },
+]
+
 const DashboardLayout: React.FC<React.PropsWithChildren<DashboardLayoutProps>> = () => {
-  const { sidebarCollapsed, showTagView } = useSetting()
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken()
 
   return (
-    <LayoutStyled>
-      <LayoutSider />
-      <Wrap className={cx({ collapsed: sidebarCollapsed })}>
-        <FixedHeader $collapsed={sidebarCollapsed}>
-          <LayoutHeader />
-          {showTagView ? <TagView /> : null}
-        </FixedHeader>
-
-        <MainApp>
-          <Outlet />
-        </MainApp>
-      </Wrap>
-    </LayoutStyled>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider breakpoint="lg" collapsedWidth="0">
+        <div className="demo-logo-vertical" />
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+      </Sider>
+      <Layout>
+        <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Content style={{ margin: '24px 16px 0' }}>
+          <div
+            style={{
+              padding: 24,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Outlet />
+          </div>
+        </Content>
+      </Layout>
+    </Layout>
   )
 }
 
